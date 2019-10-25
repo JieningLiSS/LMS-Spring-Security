@@ -73,13 +73,6 @@ public class OrchController
 	RestTemplate rt;
 	private final String adminUri = "http://admin-service/lms/admin";
 	private final String libUri = "http://librarian-service/lms/librarian";
-	private final String borrowerUri = "http://borrower-service/lms/borrower";
-
-	@Bean
-	@LoadBalanced
-	public RestTemplate getRestTemplate(){
-		return new RestTemplate();
-	}
 	
 	
 	/************************Security*****************************/
@@ -396,50 +389,6 @@ public class OrchController
 			        }
 		}
 	
-
-	/***************************Borrower*********************************/
-	//checkOutBook
-	@PostMapping(path="/borrower/book-checkout",consumes={"application/json","application/xml"})
-	public ResponseEntity<?> checkOutBook(@RequestHeader("Accept") String accept,
-			@RequestHeader("Content-Type") String contentType, @RequestBody ReadBookLoanData readBookLoanData ){	
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-        headers.add("Accept", accept);
-        headers.add("Content-Type", contentType);     
-        try{
-			return rt.exchange(borrowerUri+"/book-checkout", 
-				HttpMethod.POST, new HttpEntity<Object>(readBookLoanData,headers) , String.class );
-		}catch(HttpStatusCodeException e) {
-			return new ResponseEntity<String>(e.getStatusCode());
-		}
-		
-	  }
-	
-	
-	//getListOfLoanedBooks
-	@GetMapping(path="/borrower/see-loaned-books/card-number/{cardNumber}",produces={"application/json","application/xml"})
-	public ResponseEntity<?> getListOfLoanedBooks(@PathVariable int cardNumber){       
-	       try{
-				return rt.exchange(libUri+"/see-loaned-books/card-number/"+cardNumber, 
-					HttpMethod.GET, null ,BookLoans.class);
-			}catch(HttpStatusCodeException e) {
-				return new ResponseEntity<BookLoans>(e.getStatusCode());
-			}
-	}
-	
-	//returnBook
-	@DeleteMapping(path="/borrower/book-return",consumes={"application/json","application/xml"})
-	public ResponseEntity<String> returnBook(@RequestHeader("Accept") String accept,
-			@RequestHeader("Content-Type") String contentType,@RequestBody ReadBookLoanData readBookLoanData){
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-        headers.add("Accept", accept);
-        headers.add("Content-Type", contentType);
-		try{
-			return rt.exchange(borrowerUri+"/book-return", 
-				HttpMethod.DELETE, new HttpEntity<Object>(readBookLoanData,headers) , String.class);
-		}catch(HttpStatusCodeException e) {
-			return new ResponseEntity<String>(e.getStatusCode());
-		}
-	}
 	
 	
 	/******************************Librarian*********************************/
