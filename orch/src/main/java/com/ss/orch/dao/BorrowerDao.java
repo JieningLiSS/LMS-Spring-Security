@@ -15,7 +15,7 @@ public class BorrowerDao {
 	@Autowired
 	RestTemplate template;
 	
-	private static final String BASE = "http://BORROWER-SERVICE/lms/borrower/";
+	private static final String BASE = "http://borrowerelb-456236775.us-east-1.elb.amazonaws.com/lms/borrower/";
 
 	public LibraryBranch[] getBranches() {
 		

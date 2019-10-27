@@ -71,8 +71,15 @@ public class OrchController
 	
 	@Autowired
 	RestTemplate rt;
-	private final String adminUri = "http://admin-service/lms/admin";
-	private final String libUri = "http://librarian-service/lms/librarian";
+	private final String adminUri = "http://myELB-1700478388.us-east-2.elb.amazonaws.com/lms/admin";
+	private final String libUri = "http://librarianLB-1418092176.us-east-2.elb.amazonaws.com/lms/librarian";
+	
+	
+	
+	@GetMapping("/health")
+	public HttpStatus getHealth() {
+		return HttpStatus.OK;
+	}
 	
 	
 	/************************Security*****************************/
