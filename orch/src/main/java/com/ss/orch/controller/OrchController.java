@@ -75,6 +75,13 @@ public class OrchController
 	private final String libUri = "http://librarianLB-1418092176.us-east-2.elb.amazonaws.com/lms/librarian";
 	
 	
+	
+	@GetMapping("/health")
+	public HttpStatus getHealth() {
+		return HttpStatus.OK;
+	}
+	
+	
 	/************************Security*****************************/
 	
 	@GetMapping(path = "username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
