@@ -400,7 +400,7 @@ public class OrchController
 	
 	/******************************Librarian*********************************/
 	//getAllLibraryBranch
-	@GetMapping(path="/librarian/list",produces = {"application/json","application/xml"})
+	@GetMapping(path="/librarian/branch",produces = {"application/json","application/xml"})
     public ResponseEntity<?>  getAllLibraryBranch(){
         ResponseEntity<List<LibraryBranch>> libraryBranchList =  rt.exchange(libUri+"/list",
                 HttpMethod.GET,null, new ParameterizedTypeReference<List<LibraryBranch>>() {
@@ -409,22 +409,8 @@ public class OrchController
         return new ResponseEntity<List<LibraryBranch>>(libraryBranchList.getBody(),HttpStatus.OK);
     }
     
-	//getLibraryBranchById
-    @GetMapping(path="/librarian/id/{libraryBranchId}",produces = {"application/json","application/xml"})
-    public ResponseEntity<?> getLibraryBranchById(@RequestHeader("Content-Type") String contentType, @PathVariable int libraryBranchId){
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-        headers.add("Content-Type", contentType);
-        try {
-            return rt.exchange(libUri+"/id/"+libraryBranchId, 
-                    HttpMethod.GET,new HttpEntity<Object>(headers), LibraryBranch.class );
-            
-        }catch(HttpStatusCodeException e) {
-            return new ResponseEntity<LibraryBranch>(e.getStatusCode());
-        }
-     
-    }
     
-    @PutMapping(path="/librarian/branchChange")
+    @PutMapping(path="/librarian/branch")
     public ResponseEntity<?> updateLibraryBranch(@RequestHeader("Accept") String accept,@RequestHeader("Content-Type") String contentType, @RequestBody LibraryBranch libraryBranch) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Accept", accept);
@@ -439,21 +425,8 @@ public class OrchController
         
     }
     
-    @GetMapping(path="/librarian/id/{libraryBranchId}/book-list",produces = {"application/json","application/xml"})
-    public ResponseEntity<?> getBookListByBranchId(@PathVariable int libraryBranchId){
-        try{
-            ResponseEntity<List<BookCopies>> bookCopiesList = rt.exchange(libUri+"/id/"+libraryBranchId+"/book-list",      
-                HttpMethod.GET,null, new ParameterizedTypeReference<List<BookCopies>>() {
-            
-        } );
-            return bookCopiesList;
-        }catch(HttpStatusCodeException e) {
-            return new ResponseEntity<List<BookCopies>>(e.getStatusCode());
-        }
     
-    }
-    
-    @PutMapping(path="/librarian/copyAddition",consumes={"application/json","application/xml"})
+    @PutMapping(path="/librarian/copy",consumes={"application/json","application/xml"})
     public ResponseEntity<?> updateNoOfCopies(@RequestHeader("Accept") String accept,@RequestHeader("Content-Type") String contentType , @RequestBody ReadBookCopies readBookCopies){
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Accept", accept);
