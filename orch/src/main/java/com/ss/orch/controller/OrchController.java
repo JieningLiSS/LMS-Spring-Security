@@ -3,6 +3,8 @@ package com.ss.orch.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
@@ -137,11 +139,77 @@ public class OrchController
 
 	}
 	
-	
-	
+	/************************Admin New*********************************/
+	//getAllAuthors
+		@RequestMapping(value = "/admin/authors", method = RequestMethod.GET)
+		public ResponseEntity<Author> getAllAuthor(@RequestHeader("Accept") String accept,
+				@RequestHeader("Content-Type") String contentType){
+			MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+			headers.add("Content-Type", contentType);
+			headers.add("Accept", accept);
+			HttpEntity<Author> request = new HttpEntity<Author>(headers);
+			
+		    try {
+		    	return rt.exchange(adminUri + "/authors", HttpMethod.GET, request, Author.class);  
+		        }catch(HttpStatusCodeException e) {
+		            return new ResponseEntity<Author>(e.getStatusCode());
+		        }		
+		}
+		
+		//getAllPublishers
+		@RequestMapping(value = "/admin/publishers", method = RequestMethod.GET)
+		public ResponseEntity<Publisher> getAllPublishers(@RequestHeader("Accept") String accept,
+				@RequestHeader("Content-Type") String contentType){
+			MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+			headers.add("Content-Type", contentType);
+			headers.add("Accept", accept);
+			HttpEntity<Publisher> request = new HttpEntity<Publisher>(headers);
+			
+			  try {
+				  return rt.exchange(adminUri + "/publishers", HttpMethod.GET, request, Publisher.class);
+			        }catch(HttpStatusCodeException e) {
+			            return new ResponseEntity<Publisher>(e.getStatusCode());
+			        }
+		}
+		
+		//getAllBooks
+				@RequestMapping(value = "/admin/publishers", method = RequestMethod.GET)
+				public ResponseEntity<Book> getAllBooks(@RequestHeader("Accept") String accept,
+						@RequestHeader("Content-Type") String contentType){
+					MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+					headers.add("Content-Type", contentType);
+					headers.add("Accept", accept);
+					HttpEntity<Book> request = new HttpEntity<Book>(headers);
+					
+					  try {
+						  return rt.exchange(adminUri + "/publishers", HttpMethod.GET, request, Book.class);
+					        }catch(HttpStatusCodeException e) {
+					            return new ResponseEntity<Book>(e.getStatusCode());
+					        }
+				}
+	//getAllBranched
+				@RequestMapping(value = "/admin/libraryBranches", method = RequestMethod.GET)
+				public ResponseEntity<LibraryBranch> getAllLibraryBranch(@RequestHeader("Accept") String accept,
+						@RequestHeader("Content-Type") String contentType){
+					MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+					headers.add("Content-Type", contentType);
+					headers.add("Accept", accept);
+					HttpEntity<LibraryBranch> request = new HttpEntity<LibraryBranch>(headers);			
+					 try {
+						 return rt.exchange(adminUri + "/libraryBranches", HttpMethod.GET, request, LibraryBranch.class);
+					        }catch(HttpStatusCodeException e) {
+					            return new ResponseEntity<LibraryBranch>(e.getStatusCode());
+					        }
+				}
+				
+		
+		
+		
 
 
 	/************************Admin*********************************/
+	
+	
 	//createAuthor
 	@RequestMapping(value = "/admin/authors", method = RequestMethod.POST)
 	public ResponseEntity<Author> createAuthor(@RequestHeader("Accept") String accept,
@@ -186,21 +254,7 @@ public class OrchController
 		        }		  
 	}
 	
-	//getAllPublishers
-	@RequestMapping(value = "/admin/publishers", method = RequestMethod.GET)
-	public ResponseEntity<Publisher> getAllPublishers(@RequestHeader("Accept") String accept,
-			@RequestHeader("Content-Type") String contentType, @RequestBody Publisher publisher){
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-		headers.add("Content-Type", contentType);
-		headers.add("Accept", accept);
-		HttpEntity<Publisher> request = new HttpEntity<Publisher>(publisher, headers);
-		
-		  try {
-			  return rt.exchange(adminUri + "/publishers", HttpMethod.GET, request, Publisher.class);
-		        }catch(HttpStatusCodeException e) {
-		            return new ResponseEntity<Publisher>(e.getStatusCode());
-		        }
-	}
+
 
 	//createPublisher
 	@RequestMapping(value = "/admin/publishers", method = RequestMethod.POST)
@@ -247,16 +301,17 @@ public class OrchController
 		}
 
 	//createBook
-	@RequestMapping(value = "/admin/books", method = RequestMethod.POST)
+	@RequestMapping(value = "/books/{authorId}/{publisherId}", method = RequestMethod.POST)
 	public ResponseEntity<Book> createBook(@RequestHeader("Accept") String accept,
-			@RequestHeader("Content-Type") String contentType, @RequestBody Book book){
+			@RequestHeader("Content-Type") String contentType, @PathVariable(value = "authorId") Integer authorId,
+			@PathVariable(value = "publisherId") Long publisherId, @Valid @RequestBody Book book){
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Content-Type", contentType);
 		headers.add("Accept", accept);
 		HttpEntity<Book> request = new HttpEntity<Book>(book, headers);
 			
 		  try {
-			  return rt.exchange(adminUri + "/books", HttpMethod.POST, request, Book.class);
+			  return rt.exchange(adminUri + "/books/"+authorId+"/"+publisherId, HttpMethod.POST, request, Book.class);
 		        }catch(HttpStatusCodeException e) {
 		            return new ResponseEntity<Book>(e.getStatusCode());
 		        }
