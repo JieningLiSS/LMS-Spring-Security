@@ -36,7 +36,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ss.orch.entity.Author;
 import com.ss.orch.entity.Book;
-import com.ss.orch.entity.BookCopies;
 import com.ss.orch.entity.BookLoans;
 import com.ss.orch.entity.Borrower;
 import com.ss.orch.entity.LibraryBranch;
@@ -425,6 +424,4 @@ public class OrchController
             return new ResponseEntity<String>(e.getStatusCode());
         }
     }
-    
-
 }
